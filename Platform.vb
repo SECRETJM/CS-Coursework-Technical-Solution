@@ -49,9 +49,10 @@
 
     End Sub
 
-    Function IsTouching(ByVal PlayerY, ByVal PlayerHeight)
+    Function IsTouching(ByRef PlayerY, ByRef PlayerVelocityY, ByVal PlayerHeight)
 
-        If PlayerY >= _PositionY - (PlatformHeight + PlayerHeight) Then
+        If PlayerY + PlayerVelocityY >= _PositionY - PlayerHeight Then
+            PlayerVelocityY = 0
             Return True
         Else
             Return False

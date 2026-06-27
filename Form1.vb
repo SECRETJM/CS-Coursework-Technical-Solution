@@ -40,16 +40,17 @@
             .Top = MyPlayer.PlayerPositionY()
             .Left = MyPlayer.PlayerPositionX()
         End With
-        If Floor.IsTouching(MyPlayer.PlayerPositionY, MyPlayer.PlayerHeight) Then
-            MyPlayer.VelocityY = 0
-        Else
+        If Not Floor.IsTouching(MyPlayer.PlayerPositionY, MyPlayer.VelocityY, MyPlayer.PlayerHeight) Then
             MyPlayer.UpdateVelocityY()
+        Else
+            MyPlayer.UpdatePosition()
+            MyPlayer.VelocityY = 0
         End If
 
 
     End Sub
     Private Sub Jump(sender As Object, e As EventArgs) Handles Me.KeyDown
-        If Floor.IsTouching(MyPlayer.PlayerPositionY, MyPlayer.PlayerHeight) Then
+        If Floor.IsTouching(MyPlayer.PlayerPositionY, MyPlayer.VelocityY, MyPlayer.PlayerHeight) Then
             MyPlayer.Jump()
         End If
     End Sub
