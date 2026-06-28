@@ -46,14 +46,30 @@
             MyPlayer.UpdatePosition()
             MyPlayer.VelocityY = 0
         End If
+        If MyPlayer.VelocityX <> 0 Then
+            MyPlayer.UpdatePosition()
+        End If
+
+
 
 
     End Sub
-    Private Sub Jump(sender As Object, e As EventArgs) Handles Me.KeyDown
-        If Floor.IsTouching(MyPlayer.PlayerPositionY, MyPlayer.VelocityY, MyPlayer.PlayerHeight) Then
+    Private Sub Jump(sender As Object, e As KeyEventArgs) Handles Me.KeyDown 'Allows the player to jump when the space bar is pressed if the player is touching the floor.
+        If Floor.IsTouching(MyPlayer.PlayerPositionY, MyPlayer.VelocityY, MyPlayer.PlayerHeight) And e.KeyCode = Keys.Space Then
             MyPlayer.Jump()
         End If
     End Sub
 
+    Private Sub MoveLeft(sender As Object, e As KeyEventArgs) Handles Me.KeyDown 'Moves the player left when the A key is pressed.
+        If e.KeyCode = Keys.A Then
+            MyPlayer.MoveLeft()
+        End If
+    End Sub
+
+    Private Sub MoveRight(sender As Object, e As KeyEventArgs) Handles Me.KeyDown 'Moves the player right when the D key is pressed.        
+        If e.KeyCode = Keys.D Then
+            MyPlayer.MoveRight()
+        End If
+    End Sub
 
 End Class

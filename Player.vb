@@ -49,6 +49,15 @@
             _VelocityY = value
         End Set
     End Property
+    Private _VelocityX As Decimal
+    Public Property VelocityX() As Decimal
+        Get
+            Return _VelocityX
+        End Get
+        Set(ByVal value As Decimal)
+            _VelocityX = value
+        End Set
+    End Property
 
     Sub New()
 
@@ -57,6 +66,7 @@
         _Width = 50
         _Height = 75
         _VelocityY = 0
+        _VelocityX = 0
     End Sub
 
 
@@ -71,7 +81,19 @@
     Sub UpdatePosition() 'Adds gravity to Y Velocity (acceleration downwards) and changes position according to the velocity.
 
         _PositionY += VelocityY
-
+        _PositionX += VelocityX
 
     End Sub
+    Sub MoveLeft() 'Decreases the X velocity to move the character left.
+        If _VelocityX > -10 Then
+            _VelocityX -= 5
+        End If
+    End Sub
+
+    Sub MoveRight() 'Increases the X velocity to move the character right.
+        If _VelocityX < 10 Then
+            _VelocityX += 5
+        End If
+    End Sub
+
 End Class
