@@ -2,6 +2,8 @@
     Inherits PictureBox
 
     Private Const _Gravity As Decimal = 0.5
+    Private Const _MaxGroundVelocityX As Decimal = 10
+    Private Const _MaxAirVelocityX As Decimal = 5
 
     Private _VelocityY As Decimal
     Public Property VelocityY As Decimal
@@ -54,16 +56,26 @@
         Me.Top += _VelocityY
         Me.Left += _VelocityX
 
+        For Each platform In platforms
+            If platform.IsTouching(Me.Top, _VelocityY, Me.Height) Then
+                If _VelocityX > 0 Then
+                    _VelocityX -= 1
+                ElseIf _VelocityX < 0 Then
+                    _VelocityX += 1
+                End If
+            End If
+        Next
+
     End Sub
 
     Sub MoveLeft()
-        If _VelocityX > -10 Then
+        If _VelocityX > -(_MaxGroundVelocityX) Then
             _VelocityX -= 5
         End If
     End Sub
 
     Sub MoveRight()
-        If _VelocityX < 10 Then
+        If _VelocityX < _MaxGroundVelocityX Then
             _VelocityX += 5
         End If
     End Sub

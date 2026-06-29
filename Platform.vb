@@ -1,5 +1,5 @@
 ﻿Public Class Platform
-    Inherits PictureBox
+    Inherits PictureBox 'Inheriting from picturebox gives built in properties like width, height, top, left and allows the platform to be drawn on the form.
 
     Sub New()
         Me.Height = 30
