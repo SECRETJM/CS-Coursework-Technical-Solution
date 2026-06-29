@@ -3,6 +3,9 @@
     Dim MyPlayer As New Player
     Dim Platforms As New List(Of Platform)
     Dim Floor As New Platform
+    Dim MoveLeft As Boolean = False
+    Dim MoveRight As Boolean = False
+
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Timer1.Interval = 16
@@ -17,9 +20,18 @@
         Me.Controls.Add(Floor)
         Platforms.Add(Floor)
 
+
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+
+        If MoveLeft Then
+            MyPlayer.MoveLeft()
+        End If
+        If MoveRight Then
+            MyPlayer.MoveRight()
+        End If
+
         MyPlayer.UpdatePosition(Platforms)
     End Sub
 
@@ -33,9 +45,17 @@
                     End If
                 Next
             Case Keys.A
-                MyPlayer.MoveLeft()
+                MoveLeft = True
             Case Keys.D
-                MyPlayer.MoveRight()
+                MoveRight = True
+        End Select
+    End Sub
+    Private Sub Form1_KeyUp(sender As Object, e As KeyEventArgs) Handles Me.KeyUp
+        Select Case e.KeyCode
+            Case Keys.A
+                MoveLeft = False
+            Case Keys.D
+                MoveRight = False
         End Select
     End Sub
 
