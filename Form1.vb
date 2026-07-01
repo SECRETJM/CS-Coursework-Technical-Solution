@@ -10,7 +10,6 @@
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Timer1.Interval = 16
         Timer1.Start()
-
         WindowState = FormWindowState.Maximized
 
         MyPlayer.BackColor = Color.Black

@@ -25,7 +25,7 @@
         End Set
     End Property
 
-    Sub New() 'When a new player is made it has 0 velocity so it is still, and the players dimensions are set along with starting position.
+    Public Sub New() 'When a new player is made it has 0 velocity so it is still, and the players dimensions are set along with starting position.
         Me.Left = 200
         Me.Top = 200
         Me.Width = 50
@@ -34,15 +34,15 @@
         _VelocityX = 0
     End Sub
 
-    Sub Jump() 'Changes velocity to a negative value to move the player upwards in order to jump.
+    Public Sub Jump() 'Changes velocity to a negative value to move the player upwards in order to jump.
         _VelocityY = -10
     End Sub
 
-    Sub UpdateVelocityY()
+    Private Sub UpdateVelocityY()
         _VelocityY += _Gravity
     End Sub
 
-    Sub UpdatePosition(ByVal platforms As List(Of Platform)) 'Updates the player's position using velocity and checks for a collision with a platform.
+    Public Sub UpdatePosition(ByVal platforms As List(Of Platform)) 'Updates the player's position using velocity and checks for a collision with a platform.
 
         UpdateVelocityY()
 
@@ -68,13 +68,13 @@
 
     End Sub
 
-    Sub MoveLeft()
+    Public Sub MoveLeft()
         If _VelocityX > -(_MaxGroundVelocityX) Then
             _VelocityX -= 5
         End If
     End Sub
 
-    Sub MoveRight()
+    Public Sub MoveRight()
         If _VelocityX < _MaxGroundVelocityX Then
             _VelocityX += 5
         End If
