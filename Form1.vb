@@ -2,7 +2,8 @@
     Private WithEvents Timer1 As New Timer
     Dim MyPlayer As New Player
     Dim Platforms As New List(Of Platform)
-    Dim Floor As New Platform
+    Dim Floor As New Platform(30, Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height - 100, 0)
+    Dim Platform1 As New Platform(30, 200, 800, 300)
     Dim MovingLeft As Boolean = False
     Dim MovingRight As Boolean = False
     Dim JumpsRemaining As Integer = 2
@@ -20,6 +21,9 @@
         Me.Controls.Add(Floor)
         Platforms.Add(Floor)
 
+        Platform1.BackColor = Color.Blue
+        Me.Controls.Add(Platform1)
+        Platforms.Add(Platform1)
 
     End Sub
 
@@ -33,7 +37,7 @@
         End If
         If JumpsRemaining < 2 Then
             For Each platform As Platform In Platforms
-                If platform.IsTouching(MyPlayer.Top, MyPlayer.VelocityY, MyPlayer.Height) Then
+                If platform.IsTouching(MyPlayer.Top, MyPlayer.Left, MyPlayer.VelocityY, MyPlayer.Height) Then
                     JumpsRemaining = 2
                 End If
             Next
@@ -53,7 +57,7 @@
         Select Case e.KeyCode
             Case Keys.Space
                 For Each platform As Platform In Platforms 'checks each platform for collisions.
-                    If platform.IsTouching(MyPlayer.Top, MyPlayer.VelocityY, MyPlayer.Height) Or JumpsRemaining > 0 Then
+                    If platform.IsTouching(MyPlayer.Top, MyPlayer.Left, MyPlayer.VelocityY, MyPlayer.Height) Or JumpsRemaining > 0 Then
                         MyPlayer.Jump()
                         JumpsRemaining -= 1
                         Exit For

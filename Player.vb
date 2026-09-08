@@ -26,7 +26,7 @@
     End Property
 
     Public Sub New() 'When a new player is made it has 0 velocity so it is still, and the players dimensions are set along with starting position.
-        Me.Left = 200
+        Me.Left = 400
         Me.Top = 200
         Me.Width = 50
         Me.Height = 75
@@ -49,7 +49,7 @@
         UpdateVelocityY()
 
         For Each platform As Platform In platforms
-            If platform.IsTouching(Me.Top, _VelocityY, Me.Height) Then
+            If platform.IsTouching(Me.Top, Me.Left, _VelocityY, Me.Height) Then
                 _VelocityY = 0
                 Me.Top = platform.Top - Me.Height
             End If
@@ -59,7 +59,7 @@
         Me.Left += _VelocityX
 
         For Each platform In platforms
-            If platform.IsTouching(Me.Top, _VelocityY, Me.Height) Then
+            If platform.IsTouching(Me.Top, Me.Left, _VelocityY, Me.Height) Then
                 If _VelocityX > 0 Then
                     _VelocityX -= 1
                 ElseIf _VelocityX < 0 Then
