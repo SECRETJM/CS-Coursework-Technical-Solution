@@ -38,6 +38,12 @@
                 End If
             Next
         End If
+        If MyPlayer.Left + MyPlayer.Width > Me.ClientSize.Width Then
+            MyPlayer.Left = Me.ClientSize.Width - MyPlayer.Width
+        End If
+        If MyPlayer.Left < 0 Then
+            MyPlayer.Left = 0
+        End If
 
 
         MyPlayer.UpdatePosition(Platforms)
