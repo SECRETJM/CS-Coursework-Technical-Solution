@@ -3,11 +3,12 @@
     Dim MyPlayer As New Player
     Dim Platforms As New List(Of Platform)
     Dim Floor As New Platform
-    Dim MoveLeft As Boolean = False
-    Dim MoveRight As Boolean = False
+    Dim MovingLeft As Boolean = False
+    Dim MovingRight As Boolean = False
+    Dim JumpsRemaining As Integer = 2
 
 
-    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load 'form loads, start timer at 16ms intervals, load all of the game objects (player,platforms)
         Timer1.Interval = 16
         Timer1.Start()
         WindowState = FormWindowState.Maximized
@@ -22,14 +23,22 @@
 
     End Sub
 
-    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick 'each timer interval of 16ms, checks player movement(if A/D are pressed), checks if jumps have been used/if jumps need to be reset.
 
-        If MoveLeft Then
+        If MovingLeft Then
             MyPlayer.MoveLeft()
         End If
-        If MoveRight Then
+        If MovingRight Then
             MyPlayer.MoveRight()
         End If
+        If JumpsRemaining < 2 Then
+            For Each platform As Platform In Platforms
+                If platform.IsTouching(MyPlayer.Top, MyPlayer.VelocityY, MyPlayer.Height) Then
+                    JumpsRemaining = 2
+                End If
+            Next
+        End If
+
 
         MyPlayer.UpdatePosition(Platforms)
     End Sub
@@ -37,24 +46,25 @@
     Private Sub Form1_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
         Select Case e.KeyCode
             Case Keys.Space
-                For Each platform As Platform In Platforms
-                    If platform.IsTouching(MyPlayer.Top, MyPlayer.VelocityY, MyPlayer.Height) Then
+                For Each platform As Platform In Platforms 'checks each platform for collisions.
+                    If platform.IsTouching(MyPlayer.Top, MyPlayer.VelocityY, MyPlayer.Height) Or JumpsRemaining > 0 Then
                         MyPlayer.Jump()
+                        JumpsRemaining -= 1
                         Exit For
                     End If
                 Next
             Case Keys.A
-                MoveLeft = True
+                MovingLeft = True
             Case Keys.D
-                MoveRight = True
+                MovingRight = True
         End Select
     End Sub
     Private Sub Form1_KeyUp(sender As Object, e As KeyEventArgs) Handles Me.KeyUp
         Select Case e.KeyCode
             Case Keys.A
-                MoveLeft = False
+                MovingLeft = False
             Case Keys.D
-                MoveRight = False
+                MovingRight = False
         End Select
     End Sub
 

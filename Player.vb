@@ -35,7 +35,9 @@
     End Sub
 
     Public Sub Jump() 'Changes velocity to a negative value to move the player upwards in order to jump.
+
         _VelocityY = -10
+
     End Sub
 
     Private Sub UpdateVelocityY()
