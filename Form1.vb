@@ -36,8 +36,8 @@
             MyPlayer.MoveRight()
         End If
         If JumpsRemaining < 2 Then
-            For Each platform As Platform In Platforms
-                If platform.IsTouching(MyPlayer.Top, MyPlayer.Left, MyPlayer.VelocityY, MyPlayer.Height) Then
+            For Each platform As Platform In Platforms  'checks each platform for collisions.
+                If platform.IsTouchingGround(MyPlayer.Top, MyPlayer.Left, MyPlayer.VelocityY, MyPlayer.Height) Then
                     JumpsRemaining = 2
                 End If
             Next
@@ -48,7 +48,12 @@
         If MyPlayer.Left < 0 Then
             MyPlayer.Left = 0
         End If
-
+        For Each platform As Platform In Platforms
+            If platform.IsTouchingCeiling(MyPlayer.Top, MyPlayer.Left, MyPlayer.VelocityY, MyPlayer.Height) Then
+                MyPlayer.VelocityY = 0
+                MyPlayer.Top = platform.Top + platform.Height
+            End If
+        Next
 
         MyPlayer.UpdatePosition(Platforms)
     End Sub
@@ -56,13 +61,10 @@
     Private Sub Form1_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
         Select Case e.KeyCode
             Case Keys.Space
-                For Each platform As Platform In Platforms 'checks each platform for collisions.
-                    If platform.IsTouching(MyPlayer.Top, MyPlayer.Left, MyPlayer.VelocityY, MyPlayer.Height) Or JumpsRemaining > 0 Then
-                        MyPlayer.Jump()
-                        JumpsRemaining -= 1
-                        Exit For
-                    End If
-                Next
+                If JumpsRemaining > 0 Then
+                    MyPlayer.Jump()
+                    JumpsRemaining -= 1
+                End If
             Case Keys.A
                 MovingLeft = True
             Case Keys.D

@@ -49,7 +49,7 @@
         UpdateVelocityY()
 
         For Each platform As Platform In platforms
-            If platform.IsTouching(Me.Top, Me.Left, _VelocityY, Me.Height) Then
+            If platform.IsTouchingGround(Me.Top, Me.Left, _VelocityY, Me.Height) Then
                 _VelocityY = 0
                 Me.Top = platform.Top - Me.Height
             End If
@@ -59,7 +59,7 @@
         Me.Left += _VelocityX
 
         For Each platform In platforms
-            If platform.IsTouching(Me.Top, Me.Left, _VelocityY, Me.Height) Then
+            If platform.IsTouchingGround(Me.Top, Me.Left, _VelocityY, Me.Height) Then
                 If _VelocityX > 0 Then
                     _VelocityX -= 1
                 ElseIf _VelocityX < 0 Then

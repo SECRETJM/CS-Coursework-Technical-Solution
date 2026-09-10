@@ -9,7 +9,7 @@
         Me.BackColor = Color.Green
     End Sub
 
-    Public Function IsTouching(ByVal PlayerY As Integer, ByVal PlayerX As Decimal, ByVal PlayerVelocityY As Decimal, ByVal PlayerHeight As Integer) As Boolean
+    Public Function IsTouchingGround(ByVal PlayerY As Integer, ByVal PlayerX As Decimal, ByVal PlayerVelocityY As Decimal, ByVal PlayerHeight As Integer) As Boolean
         If PlayerY + PlayerVelocityY >= Me.Top - PlayerHeight And PlayerX + 25 > Me.Left And PlayerX + 25 < Me.Left + Me.Width And Me.Top - Me.Height > PlayerY + PlayerVelocityY Then
             Return True
         Else
@@ -17,4 +17,11 @@
         End If
     End Function
 
+    Public Function IsTouchingCeiling(ByVal PlayerY As Integer, ByVal PlayerX As Decimal, ByVal PlayerVelocityY As Decimal, ByVal PlayerHeight As Integer) As Boolean
+        If PlayerY - PlayerHeight >= Me.Top + Me.Height Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
 End Class
