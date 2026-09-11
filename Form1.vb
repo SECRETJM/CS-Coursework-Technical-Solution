@@ -50,8 +50,8 @@
         End If
         For Each platform As Platform In Platforms
             If platform.IsTouchingCeiling(MyPlayer.Top, MyPlayer.Left, MyPlayer.VelocityY, MyPlayer.Height) Then
-                MyPlayer.VelocityY = 0
-                MyPlayer.Top = platform.Top + platform.Height
+                MyPlayer.VelocityY += 5
+                'MyPlayer.Top = platform.Top + platform.Height
             End If
         Next
 
