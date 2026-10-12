@@ -1,9 +1,15 @@
 ﻿Public Class Form1
     Private WithEvents Timer1 As New Timer
+
     Dim MyPlayer As New Player
+
+    Dim Enemy1 As New GroundEnemy
+    Dim Enemies As New List(Of Enemy)
+
     Dim Platforms As New List(Of Platform)
     Dim Floor As New Platform(30, Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height - 100, 0)
     Dim Platform1 As New Platform(30, 200, 800, 300)
+
     Dim MovingLeft As Boolean = False
     Dim MovingRight As Boolean = False
     Dim JumpsRemaining As Integer = 2
@@ -24,6 +30,10 @@
         Platform1.BackColor = Color.Blue
         Me.Controls.Add(Platform1)
         Platforms.Add(Platform1)
+
+        Enemy1.BackColor = Color.Red
+        Me.Controls.Add(Enemy1)
+        Enemies.Add(Enemy1)
 
     End Sub
 
@@ -50,12 +60,15 @@
         End If
         For Each platform As Platform In Platforms
             If platform.IsTouchingCeiling(MyPlayer.Top, MyPlayer.Left, MyPlayer.VelocityY, MyPlayer.Height) Then
-                MyPlayer.VelocityY += 5
-                'MyPlayer.Top = platform.Top + platform.Height
+                MyPlayer.VelocityY += 2
             End If
         Next
 
         MyPlayer.UpdatePosition(Platforms)
+        For Each Enemy In Enemies
+            Enemy.UpdatePosition(Platforms)
+            Enemy.CheckDirection(MyPlayer.Left)
+        Next
     End Sub
 
     Private Sub Form1_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown

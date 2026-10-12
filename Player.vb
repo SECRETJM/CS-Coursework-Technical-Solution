@@ -4,6 +4,7 @@
     Private Const _Gravity As Decimal = 0.5
     Private Const _MaxGroundVelocityX As Decimal = 10
     Private Const _MaxAirVelocityX As Decimal = 5
+    Private Const _FrictionConst As Decimal = 0.8
 
     Private _VelocityY As Decimal
     Public Property VelocityY As Decimal
@@ -49,14 +50,14 @@
         UpdateVelocityY()
 
         For Each platform As Platform In platforms
-            If platform.IsTouchingGround(Me.Top, Me.Left, _VelocityY, Me.Height) Then
+            If platform.IsTouchingGround(Me.Top, Me.Left, _VelocityY, Me.Height) And _VelocityY > 0 Then
                 _VelocityY = 0
                 Me.Top = platform.Top - Me.Height
             End If
         Next
 
         Me.Top += _VelocityY
-        Me.Left += _VelocityX
+        Me.Left += _VelocityX * _FrictionConst
 
         For Each platform In platforms
             If platform.IsTouchingGround(Me.Top, Me.Left, _VelocityY, Me.Height) Then
