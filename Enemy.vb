@@ -48,6 +48,9 @@
         End If
     End Sub
 
+    Public Overridable Function InAttackRange(ByVal PlayerX As Integer, ByVal PlayerY As Integer) As Boolean
+        Return False
+    End Function
 
 End Class
 
@@ -57,10 +60,23 @@ Class GroundEnemy
     Private Const _MaxGroundVelocityX As Decimal = 10
     Private Const _MaxAirVelocityX As Decimal = 5
     Private Const _FrictionConst As Decimal = 0.8
+    Private _Range As Integer = 50
     Public Sub New()
         MyBase.New()
         Me.BackColor = Color.Red
         Me.Left = 400
         Me.Top = 200
     End Sub
+
+    Public Overrides Function InAttackRange(PlayerX As Integer, PlayerY As Integer) As Boolean
+        MyBase.InAttackRange(PlayerX, PlayerY)
+        If Me.VelocityX > 0 AndAlso Me.Left + Me.Width + _Range >= PlayerX Then
+            Return True
+        ElseIf Me.VelocityX < 0 AndAlso Me.Left - _Range <= PlayerX Then
+            Return True
+        Else
+            Return False
+        End If
+
+    End Function
 End Class
