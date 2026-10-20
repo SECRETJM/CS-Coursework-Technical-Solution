@@ -1,10 +1,12 @@
 ﻿Public Class Form1
-    Private WithEvents Timer1 As New Timer
+    Private WithEvents GameTimer As New Timer
 
     Dim MyPlayer As New Player
 
     Dim Enemy1 As New GroundEnemy
+    Dim Enemy2 As New AirEnemy
     Dim Enemies As New List(Of Enemy)
+
 
     Dim Platforms As New List(Of Platform)
     Dim Floor As New Platform(30, Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height - 100, 0)
@@ -16,8 +18,8 @@
 
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load 'form loads, start timer at 16ms intervals, load all of the game objects (player,platforms)
-        Timer1.Interval = 16
-        Timer1.Start()
+        GameTimer.Interval = 16
+        GameTimer.Start()
         WindowState = FormWindowState.Maximized
 
         MyPlayer.BackColor = Color.Black
@@ -31,13 +33,14 @@
         Me.Controls.Add(Platform1)
         Platforms.Add(Platform1)
 
-        Enemy1.BackColor = Color.Red
         Me.Controls.Add(Enemy1)
         Enemies.Add(Enemy1)
 
+        Me.Controls.Add(Enemy2)
+        Enemies.Add(Enemy2)
     End Sub
 
-    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick 'each timer interval of 16ms, checks player movement(if A/D are pressed), checks if jumps have been used/if jumps need to be reset.
+    Private Sub GameTimer_Tick(sender As Object, e As EventArgs) Handles GameTimer.Tick 'each timer interval of 16ms, checks player movement(if A/D are pressed), checks if jumps have been used/if jumps need to be reset.
 
         If MovingLeft Then
             MyPlayer.MoveLeft()
@@ -67,7 +70,8 @@
         MyPlayer.UpdatePosition(Platforms)
         For Each Enemy In Enemies
             Enemy.UpdatePosition(Platforms)
-            Enemy.CheckDirection(MyPlayer.Left)
+            Enemy.CheckDirection(MyPlayer.Left, MyPlayer.Top)
+
         Next
     End Sub
 
