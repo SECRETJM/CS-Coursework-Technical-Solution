@@ -42,7 +42,7 @@
         Me.Left += _VelocityX * 0.8
     End Sub
 
-    Public Overridable Sub CheckDirection(ByVal PlayerX As Integer, ByVal PlayerY As Integer)
+    Public Overridable Sub CheckXDirection(ByVal PlayerX As Integer)
         If Me.Left > PlayerX Then
             While _VelocityX > -5
                 _VelocityX -= 0.5
@@ -66,7 +66,7 @@ Class GroundEnemy
     Private Const _MaxGroundVelocityX As Decimal = 10
     Private Const _MaxAirVelocityX As Decimal = 5
     Private Const _FrictionConst As Decimal = 0.8
-    Private _Range As Integer = 50
+    Private ReadOnly _Range As Integer = 50
     Public Sub New()
         MyBase.New()
         Me.BackColor = Color.Red
@@ -92,7 +92,7 @@ Class AirEnemy
     Private Const _MaxGroundVelocityX As Decimal = 10
     Private Const _MaxAirVelocityX As Decimal = 5
     Private Const _FrictionConst As Decimal = 0.8
-    Private _Range As Integer = 50
+    Private ReadOnly _Range As Integer = 5
     Public Sub New()
         MyBase.New()
         Me.BackColor = Color.Purple
@@ -109,16 +109,19 @@ Class AirEnemy
             Return False
         End If
     End Function
-    Public Overrides Sub CheckDirection(PlayerX As Integer, PlayerY As Integer)
-        MyBase.CheckDirection(PlayerX, PlayerY)
-        If PlayerY > Me.Top Then
-            _VelocityY = 1.5
-        ElseIf PlayerY < Me.Top Then
-            _VelocityY = -1.5
+    Public Overrides Sub CheckXDirection(PlayerX As Integer)
+        MyBase.CheckXDirection(PlayerX)
+        UpdateVelocityY()
+    End Sub
+    Protected Overrides Sub UpdateVelocityY()
+        If _VelocityY > 5 Then
+            _VelocityY += 2
+        ElseIf _VelocityY < -5 Then
+            _VelocityY -= 2
         End If
     End Sub
     Public Overrides Sub UpdatePosition(platforms As List(Of Platform))
         MyBase.UpdatePosition(platforms)
-
+        Me.Top += _VelocityY
     End Sub
 End Class

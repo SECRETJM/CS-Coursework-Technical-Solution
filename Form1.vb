@@ -38,6 +38,7 @@
 
         Me.Controls.Add(Enemy2)
         Enemies.Add(Enemy2)
+
     End Sub
 
     Private Sub GameTimer_Tick(sender As Object, e As EventArgs) Handles GameTimer.Tick 'each timer interval of 16ms, checks player movement(if A/D are pressed), checks if jumps have been used/if jumps need to be reset.
@@ -70,8 +71,7 @@
         MyPlayer.UpdatePosition(Platforms)
         For Each Enemy In Enemies
             Enemy.UpdatePosition(Platforms)
-            Enemy.CheckDirection(MyPlayer.Left, MyPlayer.Top)
-
+            Enemy.CheckXDirection(MyPlayer.Left)
         Next
     End Sub
 
