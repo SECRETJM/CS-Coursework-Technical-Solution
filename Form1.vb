@@ -7,6 +7,7 @@
     Dim Enemy2 As New AirEnemy
     Dim Enemies As New List(Of Enemy)
 
+
     Dim Platforms As New List(Of Platform)
     Dim Floor As New Platform(30, Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height - 100, 0)
     Dim Platform1 As New Platform(30, 200, 800, 300)
