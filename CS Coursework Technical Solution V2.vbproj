@@ -73,9 +73,11 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AStar.vb" />
     <Compile Include="Enemy.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="NavGraph.vb" />
     <Compile Include="Form1.vb">
       <SubType>Form</SubType>
     </Compile>
