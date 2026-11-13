@@ -1,7 +1,7 @@
 ' A* pathfinding on the navigation graph.
 ' f(n) = g(n) + h(n)
 ' g(n) = cost so far from the start
-' h(n) = straight-line estimate to the goal (never overestimates, so A* is admissible)
+' h(n) = straight-line estimate to the goal 
 
 Public Class PathResult
     Public Property Found As Boolean
@@ -19,9 +19,9 @@ Public Class PathResult
             Return "No path"
         End If
 
-        Dim text As String = "N" & Nodes(0).Id.ToString()
+        Dim text As String = "N" & Nodes(0).NodeId.ToString()
         For i As Integer = 0 To Actions.Count - 1
-            text &= " " & Actions(i) & " N" & Nodes(i + 1).Id.ToString()
+            text &= " " & Actions(i) & " N" & Nodes(i + 1).NodeId.ToString()
         Next
         Return text
     End Function
@@ -35,7 +35,7 @@ Public Class AStarPathfinder
             Return result
         End If
 
-        If startNode.Id = goalNode.Id Then
+        If startNode.NodeId = goalNode.NodeId Then
             result.Found = True
             result.Nodes.Add(startNode)
             Return result
@@ -57,37 +57,37 @@ Public Class AStarPathfinder
         Next
 
         Dim openList As New List(Of GraphNode)
-        gScore(startNode.Id) = 0
-        fScore(startNode.Id) = Heuristic(startNode, goalNode)
+        gScore(startNode.NodeId) = 0
+        fScore(startNode.NodeId) = Heuristic(startNode, goalNode)
         openList.Add(startNode)
-        inOpen(startNode.Id) = True
+        inOpen(startNode.NodeId) = True
 
         While openList.Count > 0
             Dim current As GraphNode = NodeWithLowestF(openList, fScore)
-            If current.Id = goalNode.Id Then
+            If current.NodeId = goalNode.NodeId Then
                 Return ReconstructPath(graph, startNode, goalNode, parentId, parentAction)
             End If
 
             openList.Remove(current)
-            inOpen(current.Id) = False
-            closed(current.Id) = True
+            inOpen(current.NodeId) = False
+            closed(current.NodeId) = True
 
             For Each edge As GraphEdge In current.Edges
                 Dim neighbour As GraphNode = edge.ToNode
-                If closed(neighbour.Id) Then
+                If closed(neighbour.NodeId) Then
                     Continue For
                 End If
 
-                Dim tentativeG As Decimal = gScore(current.Id) + edge.Cost
-                If tentativeG < gScore(neighbour.Id) Then
-                    parentId(neighbour.Id) = current.Id
-                    parentAction(neighbour.Id) = edge.Action
-                    gScore(neighbour.Id) = tentativeG
-                    fScore(neighbour.Id) = tentativeG + Heuristic(neighbour, goalNode)
+                Dim tentativeG As Decimal = gScore(current.NodeId) + edge.Cost
+                If tentativeG < gScore(neighbour.NodeId) Then
+                    parentId(neighbour.NodeId) = current.NodeId
+                    parentAction(neighbour.NodeId) = edge.Action
+                    gScore(neighbour.NodeId) = tentativeG
+                    fScore(neighbour.NodeId) = tentativeG + Heuristic(neighbour, goalNode)
 
-                    If Not inOpen(neighbour.Id) Then
+                    If Not inOpen(neighbour.NodeId) Then
                         openList.Add(neighbour)
-                        inOpen(neighbour.Id) = True
+                        inOpen(neighbour.NodeId) = True
                     End If
                 End If
             Next
@@ -98,7 +98,7 @@ Public Class AStarPathfinder
 
     ' Euclidean distance. This is admissible because every edge costs at least the straight-line length.
     Private Function Heuristic(ByVal a As GraphNode, ByVal b As GraphNode) As Decimal
-        Dim dx As Decimal = a.X - b.X
+        Dim dx As Decimal = a.PositionX - b.PositionX
         Dim dy As Decimal = a.PlatformTop - b.PlatformTop
         Return CDec(Math.Sqrt(CDbl((dx * dx) + (dy * dy))))
     End Function
@@ -106,13 +106,13 @@ Public Class AStarPathfinder
     ' Linear scan of the open list. Fine here because the graph only has a few dozen nodes.
     Private Function NodeWithLowestF(ByVal openList As List(Of GraphNode), ByVal fScore() As Decimal) As GraphNode
         Dim best As GraphNode = openList(0)
-        Dim bestF As Decimal = fScore(best.Id)
+        Dim bestF As Decimal = fScore(best.NodeId)
 
         For i As Integer = 1 To openList.Count - 1
             Dim candidate As GraphNode = openList(i)
-            If fScore(candidate.Id) < bestF Then
+            If fScore(candidate.NodeId) < bestF Then
                 best = candidate
-                bestF = fScore(candidate.Id)
+                bestF = fScore(candidate.NodeId)
             End If
         Next
 
@@ -125,9 +125,9 @@ Public Class AStarPathfinder
 
         Dim reverseNodes As New List(Of GraphNode)
         Dim reverseActions As New List(Of String)
-        Dim currentId As Integer = goalNode.Id
+        Dim currentId As Integer = goalNode.NodeId
 
-        While currentId <> startNode.Id
+        While currentId <> startNode.NodeId
             reverseNodes.Add(graph.Nodes(currentId))
             reverseActions.Add(parentAction(currentId))
             currentId = parentId(currentId)

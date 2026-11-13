@@ -4,7 +4,7 @@
     Private Const _Gravity As Decimal = 0.5
     Private Const _MaxGroundVelocityX As Decimal = 10
     Private Const _MaxAirVelocityX As Decimal = 5
-    Private Const _FrictionConst As Decimal = 0.8
+    Private Const _FrictionConst As Decimal = 0.4
 
     Private _VelocityY As Decimal
     Public Property VelocityY As Decimal
@@ -26,6 +26,17 @@
         End Set
     End Property
 
+    Private _Health As Integer
+    Public Property Health As Integer
+        Get
+            Return _Health
+        End Get
+        Set(ByVal value As Integer)
+            _Health = value
+        End Set
+    End Property
+
+
     Public Sub New() 'When a new player is made it has 0 velocity so it is still, and the players dimensions are set along with starting position.
         Me.Left = 400
         Me.Top = 200
@@ -33,12 +44,11 @@
         Me.Height = 75
         _VelocityY = 0
         _VelocityX = 0
+        _Health = 100
     End Sub
 
-    Public Sub Jump() 'Changes velocity to a negative value to move the player upwards in order to jump.
-
+    Public Sub Jump() 'Changes velocity to a negative value to move the player upwards (jump).
         _VelocityY = -10
-
     End Sub
 
     Private Sub UpdateVelocityY()

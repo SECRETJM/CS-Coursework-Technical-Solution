@@ -10,11 +10,12 @@
 
     Dim Platforms As New List(Of Platform)
     Dim Floor As New Platform(30, Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height - 100, 0)
-    Dim Platform1 As New Platform(30, 200, 800, 300)
+    Dim Platform1 As New Platform(30, 200, 900, 300)
+    Dim Platform2 As New Platform(30, 200, 800, 600)
 
     Dim NavigationGraph As New NavGraph
     Dim PathLabel As New Label
-    Dim ShowNavGraph As Boolean = True
+    Dim ShowNavGraph As Boolean = False
 
     Dim MovingLeft As Boolean = False
     Dim MovingRight As Boolean = False
@@ -34,9 +35,13 @@
         Me.Controls.Add(Floor)
         Platforms.Add(Floor)
 
-        Platform1.BackColor = Color.Blue
+        Platform1.BackColor = Color.LightBlue
         Me.Controls.Add(Platform1)
         Platforms.Add(Platform1)
+
+        Platform2.BackColor = Color.Blue
+        Me.Controls.Add(Platform2)
+        Platforms.Add(Platform2)
 
         NavigationGraph.Build(Platforms, Enemy1.Width, Enemy1.Height)
         If ShowNavGraph Then
@@ -55,19 +60,20 @@
         PathLabel.Top = 12
         PathLabel.Font = New Font("Consolas", 10.0!)
         PathLabel.Text = "A* path: building..."
-        Me.Controls.Add(PathLabel)
-        PathLabel.BringToFront()
+        'Me.Controls.Add(PathLabel)
+        'PathLabel.BringToFront()
     End Sub
 
     Private Sub DrawNavNodes()
         For Each node As GraphNode In NavigationGraph.Nodes
-            Dim marker As New PictureBox
-            marker.Width = 8
-            marker.Height = 8
-            marker.BackColor = Color.Gold
-            marker.Left = node.X - 4
-            marker.Top = node.PlatformTop - 8
-            Me.Controls.Add(marker)
+            Using marker As New PictureBox
+                marker.Width = 8
+                marker.Height = 8
+                marker.BackColor = Color.Gold
+                marker.Left = node.PositionX - 4
+                marker.Top = node.PlatformTop - 8
+                Me.Controls.Add(marker)
+            End Using
         Next
     End Sub
 
@@ -76,24 +82,20 @@
         If MovingLeft Then
             MyPlayer.MoveLeft()
         End If
+
         If MovingRight Then
             MyPlayer.MoveRight()
         End If
+
         If JumpsRemaining < 2 Then
-            For Each platform As Platform In Platforms  'checks each platform for collisions.
-                If platform.IsTouchingGround(MyPlayer.Top, MyPlayer.Left, MyPlayer.VelocityY, MyPlayer.Height) Then
-                    JumpsRemaining = 2
-                End If
-            Next
+            ResetJumps()
         End If
-        If MyPlayer.Left + MyPlayer.Width > Me.ClientSize.Width Then
-            MyPlayer.Left = Me.ClientSize.Width - MyPlayer.Width
-        End If
-        If MyPlayer.Left < 0 Then
-            MyPlayer.Left = 0
-        End If
+
+        MapBorders()
+
+
         For Each platform As Platform In Platforms
-            If platform.IsTouchingCeiling(MyPlayer.Top, MyPlayer.Left, MyPlayer.VelocityY, MyPlayer.Height) Then
+            If platform.IsTouchingCeiling(MyPlayer.Top, MyPlayer.Left, MyPlayer.Height) Then
                 MyPlayer.VelocityY += 2
             End If
         Next
@@ -104,8 +106,9 @@
             Enemy.UpdateAI(MyPlayer, Platforms, NavigationGraph)
         Next
 
-        PathLabel.Text = "A* path: " & Enemy1.DebugPathText
-        PathLabel.BringToFront()
+
+        'PathLabel.Text = "A* path: " & Enemy1.DebugPathText
+        'PathLabel.BringToFront()
     End Sub
 
     Private Sub Form1_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
@@ -130,4 +133,20 @@
         End Select
     End Sub
 
+    Private Sub ResetJumps() 'resets jumps remaining to 2 when the player is on a platform.
+        For Each platform As Platform In Platforms
+            If platform.IsTouchingGround(MyPlayer.Top, MyPlayer.Left, MyPlayer.VelocityY, MyPlayer.Height) Then
+                JumpsRemaining = 2
+            End If
+        Next
+    End Sub
+
+    Private Sub MapBorders() 'prevents the player from leaving the map.
+        If MyPlayer.Left + MyPlayer.Width > Me.ClientSize.Width Then
+            MyPlayer.Left = Me.ClientSize.Width - MyPlayer.Width
+        End If
+        If MyPlayer.Left < 0 Then
+            MyPlayer.Left = 0
+        End If
+    End Sub
 End Class

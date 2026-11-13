@@ -17,7 +17,7 @@
         End If
     End Function
 
-    Public Function IsTouchingCeiling(ByVal PlayerY As Integer, ByVal PlayerX As Decimal, ByVal PlayerVelocityY As Decimal, ByVal PlayerHeight As Integer) As Boolean
+    Public Function IsTouchingCeiling(ByVal PlayerY As Integer, ByVal PlayerX As Decimal, ByVal PlayerHeight As Integer) As Boolean
         If PlayerY + PlayerHeight > Me.Top And PlayerY + PlayerHeight < Me.Top + Me.Height And PlayerX + 50 > Me.Left And PlayerX < Me.Left + Me.Width Then
             Return True
         Else
