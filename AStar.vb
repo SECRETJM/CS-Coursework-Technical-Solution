@@ -98,9 +98,9 @@ Public Class AStarPathfinder
 
     ' Euclidean distance. This is admissible because every edge costs at least the straight-line length.
     Private Function Heuristic(ByVal a As GraphNode, ByVal b As GraphNode) As Decimal
-        Dim dx As Decimal = a.PositionX - b.PositionX
-        Dim dy As Decimal = a.PlatformTop - b.PlatformTop
-        Return CDec(Math.Sqrt(CDbl((dx * dx) + (dy * dy))))
+        Dim distX As Decimal = a.PositionX - b.PositionX
+        Dim distY As Decimal = a.PlatformTop - b.PlatformTop
+        Return CDec(Math.Sqrt(CDbl((distX * distX) + (distY * distY))))
     End Function
 
     ' Linear scan of the open list. Fine here because the graph only has a few dozen nodes.

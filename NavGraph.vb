@@ -113,9 +113,9 @@ Public Class NavGraph
 
                 Dim startTop As Integer = fromNode.PlatformTop - entityHeight
                 Dim destTop As Integer = toNode.PlatformTop - entityHeight
-                Dim dx As Integer = Math.Abs(toNode.PositionX - fromNode.PositionX)
-                Dim dy As Integer = Math.Abs(toNode.PlatformTop - fromNode.PlatformTop)
-                Dim baseCost As Decimal = CDec(Math.Sqrt((dx * dx) + (dy * dy)))
+                Dim distX As Integer = Math.Abs(toNode.PositionX - fromNode.PositionX)
+                Dim distY As Integer = Math.Abs(toNode.PlatformTop - fromNode.PlatformTop)
+                Dim baseCost As Decimal = CDec(Math.Sqrt((distX * distX) + (distY * distY)))
 
                 If SimulateArc(fromNode.PositionX, startTop, toNode.PositionX, destTop, True, entityHeight) Then
                     fromNode.Edges.Add(New GraphEdge(toNode, baseCost + 25, "Jump"))
@@ -135,11 +135,11 @@ Public Class NavGraph
             velocityY = -JumpSpeed
         End If
 
-        Dim dir As Integer = 0
+        Dim direction As Integer = 0
         If destX > startX Then
-            dir = 1
+            direction = 1
         ElseIf destX < startX Then
-            dir = -1
+            direction = -1
         End If
 
         Dim destPlatformTop As Decimal = destTop + entityHeight
@@ -147,7 +147,7 @@ Public Class NavGraph
         For tick As Integer = 1 To 150
             velocityY += Gravity
             y += velocityY
-            x += dir * HorizPerTick
+            x += direction * HorizPerTick
 
             If velocityY >= 0 Then
                 Dim feet As Decimal = y + entityHeight
@@ -165,15 +165,15 @@ Public Class NavGraph
         Return False
     End Function
 
-    Public Function FindNearestNode(ByVal worldX As Integer, ByVal entityTop As Integer, ByVal entityHeight As Integer) As GraphNode
+    Public Function FindNearestNode(ByVal entityX As Integer, ByVal entityTop As Integer, ByVal entityHeight As Integer) As GraphNode
         Dim nearest As GraphNode = Nothing
         Dim bestDistance As Double = Double.MaxValue
 
         For Each node As GraphNode In Nodes
             Dim standingTop As Integer = node.PlatformTop - entityHeight
-            Dim dx As Double = worldX - node.PositionX
-            Dim dy As Double = entityTop - standingTop
-            Dim distance As Double = (dx * dx) + (dy * dy)
+            Dim distX As Double = entityX - node.PositionX
+            Dim distY As Double = entityTop - standingTop
+            Dim distance As Double = (distX * distX) + (distY * distY)
             If distance < bestDistance Then
                 bestDistance = distance
                 nearest = node

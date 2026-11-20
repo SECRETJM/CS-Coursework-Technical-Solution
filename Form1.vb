@@ -15,7 +15,7 @@
 
     Dim NavigationGraph As New NavGraph
     Dim PathLabel As New Label
-    Dim ShowNavGraph As Boolean = False
+    Dim ShowNavGraph As Boolean = True
 
     Dim MovingLeft As Boolean = False
     Dim MovingRight As Boolean = False
@@ -53,6 +53,7 @@
         Enemies.Add(Enemy1)
 
         Me.Controls.Add(Enemy2)
+        Enemy2.SetNavigationGraph(NavigationGraph)
         Enemies.Add(Enemy2)
 
         PathLabel.AutoSize = True
